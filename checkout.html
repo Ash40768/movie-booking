@@ -78,11 +78,20 @@
 
 
     function decrease(){
+      let no=document.getElementById("number_of_seats").value;
+      if(!no){
+        alert("add no. of seats");
+        return
+      }
+
+      let requiremoney=(+no*100)
+
       let wallet= JSON.parse(localStorage.getItem("wallet"));
       wallet=+wallet;
+      
 
-      if(wallet>=100){
-        wallet-=100;
+      if(wallet>=requiremoney){
+        wallet-=requiremoney;
         alert("BOOKING CONFIRMED");
         localStorage.setItem("wallet",JSON.stringify(wallet));
       
