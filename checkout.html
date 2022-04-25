@@ -6,21 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Checkout</title>
     <style>
-      #movie{
+      #movie {
         margin-top: 30px;
         justify-content: center;
         text-align: center;
       }
-      #movie img{
+      #movie img {
         width: 300px;
-
       }
-
+      #navbar {
+        display: flex;
+      }
+      .tag {
+        width: 95%;
+      }
+      .money {
+        width: 20%;
+      }
     </style>
   </head>
   <body>
     <div id="navbar">
-      <h1>Checkout | Cost: 100/seat</h1>
+      <h1 class="tag">Checkout | Cost: 100/seat</h1>
       <!-- Display the wallet amount here inside h1 tag with id as "wallet". Note only amount, no extra text. Like 500 not Rs 500 -->
     </div>
     <div id="user-detail">
@@ -28,8 +35,8 @@
       <!-- input field to accept number of seats with id as "number_of_seats"  -->
       <!-- A submit button to confirm booking with id as "confirm"  -->
 
-      <input type="text" placeholder="username" id="user_name">;
-      <input type="number" placeholder="number 0f seats" id="number_of_seats">
+      <input type="text" placeholder="username" id="user_name" />;
+      <input type="number" placeholder="number 0f seats" id="number_of_seats" />
       <button id="confirm" onclick="decrease()">submit</button>
     </div>
 
@@ -40,74 +47,60 @@
     </div>
   </body>
   <script>
-  function refreshmoney(){
-      let nav= document.getElementById("navbar");
+    function refreshmoney() {
+      let nav = document.getElementById("navbar");
 
-      let money=document.createElement("h1");
-      money.setAttribute("class","money")
-      let wallet=JSON.parse(localStorage.getItem("wallet"));
-      
-      if(!wallet){
-        wallet=0;
+      let money = document.createElement("h1");
+      money.setAttribute("class", "money");
+      let wallet = JSON.parse(localStorage.getItem("wallet"));
 
-        localStorage.setItem("wallet",JSON.stringify(wallet));
+      if (!wallet) {
+        wallet = 0;
+
+        localStorage.setItem("wallet", JSON.stringify(wallet));
       }
 
-      money.textContent=wallet;
+      money.textContent = wallet;
 
       nav.append(money);
-
-
     }
     refreshmoney();
-    let movie= document.getElementById("movie");
+    let movie = document.getElementById("movie");
 
-    let card=JSON.parse(localStorage.getItem("cart"));
+    let card = JSON.parse(localStorage.getItem("cart"));
 
     console.log(card);
 
+    let image = document.createElement("img");
 
-    let image= document.createElement("img");
+    image.src = card[0].Poster;
 
-    image.src=card[0].Poster;
+    let name = document.createElement("h1");
+    name.textContent = card[0].Title;
 
-    let name=document.createElement("h1");
-    name.textContent=card[0].Title;
+    movie.append(image, name);
 
-    movie.append(image,name)
-
-
-    function decrease(){
-      let no=document.getElementById("number_of_seats").value;
-      if(!no){
+    function decrease() {
+      let no = document.getElementById("number_of_seats").value;
+      if (!no) {
         alert("add no. of seats");
-        return
+        return;
       }
 
-      let requiremoney=(+no*100)
+      let requiremoney = +no * 100;
 
-      let wallet= JSON.parse(localStorage.getItem("wallet"));
-      wallet=+wallet;
-      
+      let wallet = JSON.parse(localStorage.getItem("wallet"));
+      wallet = +wallet;
 
-      if(wallet>=requiremoney){
-        wallet-=requiremoney;
+      if (wallet >= requiremoney) {
+        wallet -= requiremoney;
         alert("BOOKING CONFIRMED");
-        localStorage.setItem("wallet",JSON.stringify(wallet));
-      
+        localStorage.setItem("wallet", JSON.stringify(wallet));
+      } else {
+        alert("Add Money");
       }
-      else{
-        alert("Add Money")
-      }
-    
 
-      
-
-      setTimeout("location.reload(true);",10);
-
-
+      setTimeout("location.reload(true);", 10);
     }
-
   </script>
-  
 </html>
