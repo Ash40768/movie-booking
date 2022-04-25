@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movies</title>
+    <style>
+      #search_bar {
+        display: flex;
+      }
+      .money {
+        text-align: right;
+        width: 90%;
+      }
+      #search {
+        width: 200px;
+      }
+
+      img {
+        width: 200px;
+      }
+      #movies {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        margin-top: 30px;
+      }
+      .moviescard {
+        width: 23%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Movie List</h1>
+    <div id="search_bar">
+      <input type="text" id="search" oninput="debounce(main,1000)" />
+    </div>
+    <div id="movies"></div>
+    <div id="main"></div>
+  </body>
+  <script>
+    // refreshmoney();
+    let moviesdiv = document.getElementById("movies");
+    let id;
+    async function search() {
+      try {
+        const input = document.getElementById("search").value;
+        let url = `https://www.omdbapi.com/?s=${input}&apikey=f3c774f3`;
+        let res = await fetch(url);
+        let data = await res.json();
+        // console.log("data:", data);
+        let movies = data.Search;
+        // appendmovies(movies);
+        return movies;
+      } catch (err) {
+        console.log("err:", err);
+      }
+    }
+
+    function appendmovies(data) {
+      moviesdiv.innerHTML = null;
+
+      data.forEach(function (el) {
+        let card = document.createElement("div");
+        card.setAttribute("class", "moviescard");
+
+        let image = document.createElement("img");
+        image.src = el.Poster;
+
+        let name = document.createElement("h3");
+        name.textContent = el.Title;
+
+        let button = document.createElement("button");
+        button.textContent = "Book Now";
+        button.setAttribute("class", "book_now");
+
+        button.addEventListener("click", function (name) {
+          let cart = [];
+          cart.push(el);
+
+          localStorage.setItem("cart", JSON.stringify(cart));
+
+          location.href = "checkout.html";
+        });
+
+        card.append(image, name, button);
+
+        moviesdiv.append(card);
+        // p.addEventListener("click",showmovies(el))
+      });
+
+      // 1. we will make  search and append  1 function
+    }
+    async function main() {
+      let data = await search();
+      if (data === undefined) {
+        return false;
+      }
+      console.log("data: ", data);
+      appendmovies(data);
+    }
+
+    // 2. DEBOUNCING
+    function debounce(func, delay) {
+      if (id) {
+        clearTimeout(id);
+      }
+      id = setTimeout(function () {
+        func();
+      }, delay);
+    }
+
+    function refreshmoney() {
+      let nav = document.getElementById("search_bar");
+
+      let money = document.createElement("h1");
+      money.setAttribute("class", "money");
+      let wallet = JSON.parse(localStorage.getItem("wallet"));
+
+      if (!wallet) {
+        wallet = 0;
+
+        localStorage.setItem("wallet", JSON.stringify(wallet));
+      }
+
+      money.textContent = wallet;
+
+      nav.append(money);
+    }
+    refreshmoney();
+  </script>
+</html>

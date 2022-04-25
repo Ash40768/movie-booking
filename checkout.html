@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout</title>
+    <style>
+      #movie{
+        margin-top: 30px;
+        justify-content: center;
+        text-align: center;
+      }
+      #movie img{
+        width: 300px;
+
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="navbar">
+      <h1>Checkout | Cost: 100/seat</h1>
+      <!-- Display the wallet amount here inside h1 tag with id as "wallet". Note only amount, no extra text. Like 500 not Rs 500 -->
+    </div>
+    <div id="user-detail">
+      <!-- input field to accept user name with id as "user_name"  -->
+      <!-- input field to accept number of seats with id as "number_of_seats"  -->
+      <!-- A submit button to confirm booking with id as "confirm"  -->
+
+      <input type="text" placeholder="username" id="user_name">;
+      <input type="number" placeholder="number 0f seats" id="number_of_seats">
+      <button id="confirm" onclick="decrease()">submit</button>
+    </div>
+
+    <div id="movie">
+      <!-- Append the selected movie for booking here -->
+      <!-- movie should have title and image  -->
+      <!-- It should be the same movie you selected for booking  -->
+    </div>
+  </body>
+  <script>
+  function refreshmoney(){
+      let nav= document.getElementById("navbar");
+
+      let money=document.createElement("h1");
+      money.setAttribute("class","money")
+      let wallet=JSON.parse(localStorage.getItem("wallet"));
+      
+      if(!wallet){
+        wallet=0;
+
+        localStorage.setItem("wallet",JSON.stringify(wallet));
+      }
+
+      money.textContent=wallet;
+
+      nav.append(money);
+
+
+    }
+    refreshmoney();
+    let movie= document.getElementById("movie");
+
+    let card=JSON.parse(localStorage.getItem("cart"));
+
+    console.log(card);
+
+
+    let image= document.createElement("img");
+
+    image.src=card[0].Poster;
+
+    let name=document.createElement("h1");
+    name.textContent=card[0].Title;
+
+    movie.append(image,name)
+
+
+    function decrease(){
+      let wallet= JSON.parse(localStorage.getItem("wallet"));
+      wallet=+wallet;
+
+      if(wallet>=100){
+        wallet-=100;
+        alert("BOOKING CONFIRMED");
+        localStorage.setItem("wallet",JSON.stringify(wallet));
+      
+      }
+      else{
+        alert("Add Money")
+      }
+    
+
+      
+
+      setTimeout("location.reload(true);",10);
+
+
+    }
+
+  </script>
+  
+</html>
